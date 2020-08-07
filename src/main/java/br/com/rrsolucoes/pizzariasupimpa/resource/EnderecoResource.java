@@ -40,7 +40,7 @@ public class EnderecoResource {
 	@GetMapping
 	public ResponseEntity<List<Endereco>> listaEnderecos(){
 		List<Endereco> enderecos = servico.listarEnderecos();
-		return ResponseEntity.ok().body(enderecos);
+		return ResponseEntity.ok().body(enderecos);	
 	}
 	
 	@GetMapping(value="/{id}")

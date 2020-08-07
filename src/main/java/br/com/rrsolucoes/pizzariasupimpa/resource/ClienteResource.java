@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import br.com.rrsolucoes.pizzariasupimpa.model.Cliente;
+import br.com.rrsolucoes.pizzariasupimpa.model.Endereco;
+import br.com.rrsolucoes.pizzariasupimpa.service.CepService;
 import br.com.rrsolucoes.pizzariasupimpa.service.ClienteService;
 
 @RestController
@@ -25,8 +27,14 @@ public class ClienteResource {
 	@Autowired
 	ClienteService servico;
 	
+	@Autowired
+	private CepService cepServico;
+	
+	
 	@PostMapping
 	public ResponseEntity<?> salvarCliente(@RequestBody Cliente cliente){
+		List<Endereco> enderecos = cliente.getEnderecos();
+		enderecos.forEach(endereco -> cepServico.converterCep(endereco));
 		servico.salvarCliente(cliente);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").
 				  buildAndExpand(cliente.getId()).toUri();
@@ -42,6 +50,7 @@ public class ClienteResource {
 	@GetMapping(value="/{id}")
 	public ResponseEntity<?> encontrarCliente(@PathVariable(value="id") Long id){
 		Cliente cliente = servico.encontrarCliente(id).get();
+		System.out.println(cliente.getEnderecos().get(0)); 
 		return ResponseEntity.ok().body(cliente);
 	}
 	

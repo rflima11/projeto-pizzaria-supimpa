@@ -7,8 +7,14 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
+@Table(name = "tb_endereco")
 public class Endereco implements Serializable {
 	
 	/**
@@ -39,10 +45,14 @@ public class Endereco implements Serializable {
     @Column(name = "DS_LOGRADOURO")
     private String logradouro;
     
-    @Column(name = "CO_SEQ_CLIENTE")
-    private Long idPessoa;
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "CO_SEQ_CLIENTE")
+    private Cliente cliente;
     
-    public Endereco() {
+   
+
+	public Endereco() {
     	
     }
 
@@ -102,14 +112,20 @@ public class Endereco implements Serializable {
 		this.logradouro = logradouro;
 	}
 
-	public Long getIdPessoa() {
-		return idPessoa;
+	public Cliente getCliente() {
+		return cliente;
 	}
 
-	public void setIdPessoa(Long idPessoa) {
-		this.idPessoa = idPessoa;
+	public void setCliente(Cliente cliente) {
+		this.cliente = cliente;
 	}
+
+
+
+	
+	
     
-    
+	
+	 
 
 }

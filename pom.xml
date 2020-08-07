@@ -38,6 +38,7 @@
 			<artifactId>postgresql</artifactId>
 			<scope>runtime</scope>
 		</dependency>
+		
 		<dependency>
 			<groupId>com.github.gilberto-torrezan</groupId>
 			<artifactId>viacep</artifactId>

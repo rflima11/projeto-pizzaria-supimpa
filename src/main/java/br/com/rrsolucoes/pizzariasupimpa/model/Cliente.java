@@ -1,7 +1,7 @@
 package br.com.rrsolucoes.pizzariasupimpa.model;
 
 import java.io.Serializable;
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -12,10 +12,13 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
+@Table(name = "tb_cliente")
 public class Cliente implements Serializable {
 
 	/**
@@ -28,15 +31,15 @@ public class Cliente implements Serializable {
 	@Column(name = "CO_SEQ_CLIENTE")
 	private Long id;
 	
-	@Column(name = "DS_NOME")
+	@Column(name = "NO_NOME")
 	private String nome;
 	
 	@Column(name = "DS_TELEFONE")
 	private String telefone;
 	
-	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
-	@JoinColumn(name = "CO_SEQ_CLIENTE",referencedColumnName = "CO_SEQ_CLIENTE")
-	private Set<Endereco> endereco = new HashSet<>();
+
+	@OneToMany(mappedBy="cliente", fetch=FetchType.EAGER, cascade = CascadeType.ALL)
+	private List<Endereco> enderecos = new ArrayList<>();
 	
 	public Cliente() {
 		
@@ -44,6 +47,16 @@ public class Cliente implements Serializable {
 
 	public Long getId() {
 		return id;
+	}
+
+	
+	
+	public List<Endereco> getEnderecos() {
+		return enderecos;
+	}
+
+	public void setEnderecos(List<Endereco> enderecos) {
+		this.enderecos = enderecos;
 	}
 
 	public void setId(Long id) {
@@ -66,7 +79,50 @@ public class Cliente implements Serializable {
 		this.telefone = telefone;
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((nome == null) ? 0 : nome.hashCode());
+		result = prime * result + ((telefone == null) ? 0 : telefone.hashCode());
+		return result;
+	}
 
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Cliente other = (Cliente) obj;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		if (nome == null) {
+			if (other.nome != null)
+				return false;
+		} else if (!nome.equals(other.nome))
+			return false;
+		if (telefone == null) {
+			if (other.telefone != null)
+				return false;
+		} else if (!telefone.equals(other.telefone))
+			return false;
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "Cliente [id=" + id + ", nome=" + nome + ", telefone=" + telefone + "]";
+	}
+
+	
+ 
 	
 	
 	

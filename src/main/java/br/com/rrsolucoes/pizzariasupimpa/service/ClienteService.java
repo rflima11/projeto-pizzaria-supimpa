@@ -17,6 +17,7 @@ public class ClienteService {
 	
 	
 	public void salvarCliente(Cliente cliente) {
+		cliente.getEnderecos().forEach(endereco -> endereco.setCliente(cliente));
 		dao.save(cliente);
 	}
 	
@@ -32,7 +33,5 @@ public class ClienteService {
 		dao.deleteById(id);
 	}
 	
-	public void atualizarCliente() {
-	}
 	
 }
