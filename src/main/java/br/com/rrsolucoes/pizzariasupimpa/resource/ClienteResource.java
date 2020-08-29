@@ -2,6 +2,7 @@ package br.com.rrsolucoes.pizzariasupimpa.resource;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -9,12 +10,14 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import br.com.rrsolucoes.pizzariasupimpa.dto.AutoCompleteDto;
+import br.com.rrsolucoes.pizzariasupimpa.dto.ClienteDto;
 import br.com.rrsolucoes.pizzariasupimpa.model.Cliente;
 import br.com.rrsolucoes.pizzariasupimpa.model.Endereco;
 import br.com.rrsolucoes.pizzariasupimpa.service.CepService;
@@ -33,7 +36,7 @@ public class ClienteResource {
 	
 	@PostMapping
 	public ResponseEntity<?> salvarCliente(@RequestBody Cliente cliente){
-		List<Endereco> enderecos = cliente.getEnderecos();
+		Set<Endereco> enderecos = cliente.getEnderecos();
 		enderecos.forEach(endereco -> cepServico.converterCep(endereco));
 		servico.salvarCliente(cliente);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").
@@ -42,15 +45,14 @@ public class ClienteResource {
 	}
 	
 	@GetMapping
-	public ResponseEntity<List<Cliente>> listarCliente(){
-		List<Cliente> clientes = servico.listarClientes();
+	public ResponseEntity<List<ClienteDto>> listarCliente(){
+		List<ClienteDto> clientes = servico.listarClientes();
 		return ResponseEntity.ok().body(clientes);
 	}
 	
 	@GetMapping(value="/{id}")
 	public ResponseEntity<?> encontrarCliente(@PathVariable(value="id") Long id){
-		Cliente cliente = servico.encontrarCliente(id).get();
-		System.out.println(cliente.getEnderecos().get(0)); 
+		ClienteDto cliente = servico.encontrarCliente(id).get();
 		return ResponseEntity.ok().body(cliente);
 	}
 	
@@ -59,6 +61,14 @@ public class ClienteResource {
 		servico.deletarCliente(id);
 		return ResponseEntity.noContent().build();
 	}
+	
+	@GetMapping(value="/filtro-nome")
+		public ResponseEntity<?> encontrarClientePorNome(@RequestParam String nome){
+		return ResponseEntity.ok().body(servico.listarClientesPorNome(nome.toUpperCase()));
+		}
+	
+
+	
 	
 	
 

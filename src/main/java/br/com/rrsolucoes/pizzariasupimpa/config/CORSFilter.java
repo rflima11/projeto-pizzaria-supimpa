@@ -1,4 +1,4 @@
-package br.com.rrsolucoes.pizzariasupimpa.filter;
+package br.com.rrsolucoes.pizzariasupimpa.config;
 
 import java.io.IOException;
 

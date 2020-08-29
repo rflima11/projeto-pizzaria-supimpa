@@ -5,7 +5,9 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,6 +36,17 @@ public class PizzaResource {
 	public ResponseEntity<List<Pizza>> listarPizzas(){
 		List<Pizza> pizzas = servico.listarPizzas();
 		return ResponseEntity.ok().body(pizzas);	
+	}
+	
+	@GetMapping(value="/{id}")
+	public ResponseEntity<?> encontraUmEnderecoPorId(@PathVariable Long id){
+		return ResponseEntity.ok().body(servico.encontrarPizza(id));
+	}
+	
+	@DeleteMapping(value="/{id}")
+	public ResponseEntity<Void> deletarEnderecoPorId(@PathVariable Long id){
+		servico.deletarPizza(id);
+		return ResponseEntity.noContent().build();
 	}
 }
 

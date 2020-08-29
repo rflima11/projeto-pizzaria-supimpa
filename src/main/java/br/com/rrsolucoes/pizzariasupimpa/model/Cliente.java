@@ -2,6 +2,7 @@ package br.com.rrsolucoes.pizzariasupimpa.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -37,13 +38,28 @@ public class Cliente implements Serializable {
 	@Column(name = "DS_TELEFONE")
 	private String telefone;
 	
+	@OneToMany(mappedBy = "cliente", fetch = FetchType.EAGER)
+	private List<Pedido> pedidos = new ArrayList<>();
+	
 
 	@OneToMany(mappedBy="cliente", fetch=FetchType.EAGER, cascade = CascadeType.ALL)
-	private List<Endereco> enderecos = new ArrayList<>();
+	private Set<Endereco> enderecos = new HashSet<>();
 	
 	public Cliente() {
 		
 	}
+	
+	
+
+	public Cliente(Long id, String nome, String telefone, Set<Endereco> enderecos) {
+		super();
+		this.id = id;
+		this.nome = nome;
+		this.telefone = telefone;
+		this.enderecos = enderecos;
+	}
+
+
 
 	public Long getId() {
 		return id;
@@ -51,11 +67,11 @@ public class Cliente implements Serializable {
 
 	
 	
-	public List<Endereco> getEnderecos() {
+	public Set<Endereco> getEnderecos() {
 		return enderecos;
 	}
 
-	public void setEnderecos(List<Endereco> enderecos) {
+	public void setEnderecos(Set<Endereco> enderecos) {
 		this.enderecos = enderecos;
 	}
 
@@ -119,6 +135,18 @@ public class Cliente implements Serializable {
 	@Override
 	public String toString() {
 		return "Cliente [id=" + id + ", nome=" + nome + ", telefone=" + telefone + "]";
+	}
+
+
+
+	public List<Pedido> getPedidos() {
+		return pedidos;
+	}
+
+
+
+	public void setPedidos(List<Pedido> pedidos) {
+		this.pedidos = pedidos;
 	}
 
 	
